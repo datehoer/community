@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 const users = require('./routes/user');
+const entries = require('./models/entries');
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
@@ -16,14 +17,17 @@ app.set('view engine', 'pug');
 app.use(logger('dev'));
 // 解析请求主题
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 // 提供静态文件
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 指定程序路由
-app.use('/', routes);
+app.use('/', entries.list);
 app.use('/users', users);
+
+app.get('/post', entries.form);
+app.post('/post', entries.submit)
 
 app.use(function (req, res, next) {
     let err = new Error('Not Found');
