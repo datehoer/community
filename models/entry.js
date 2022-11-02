@@ -1,6 +1,6 @@
 const redis = require('redis');
 // 创建redis客户端实例
-const db = redis.createClient({url: "redis://10.20.0.22:9379/13"});
+const db = redis.createClient({url: "redis://10.20.0.22:9379/14"});
 
 class Entry {
     constructor(obj){

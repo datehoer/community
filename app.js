@@ -6,6 +6,7 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const routes = require('./routes/index');
+const validate = require('./middleware/validate')
 const users = require('./routes/user');
 const entries = require('./models/entries');
 const app = express();
@@ -27,7 +28,12 @@ app.use('/', entries.list);
 app.use('/users', users);
 
 app.get('/post', entries.form);
-app.post('/post', entries.submit)
+app.post(
+    '/post',
+    validate.required('entry[title]'),
+    validate.lengthAbove('entry[title]', 4),
+    entries.submit
+    )
 
 app.use(function (req, res, next) {
     let err = new Error('Not Found');
